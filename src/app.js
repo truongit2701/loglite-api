@@ -30,7 +30,7 @@ const createApp = () => {
 
   // --- Protected Routes (Require Auth) ---
   app.use('/projects', authenticate, projectRoutes);
-  app.use('/logs', logRoutes); // Logs ingestion is usually API Key based, not JWT
+  app.use('/logs', logRoutes); // Logs ingestion is usually API Key based, not JWTT
   app.use('/admin', authenticate, adminRoutes);
 
   // Stats API (Legacy or shared)
