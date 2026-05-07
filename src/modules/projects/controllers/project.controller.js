@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import { Project } from '../models/project.model.js';
+import { SystemConfig } from '../../system-config/models/system-config.model.js';
 import { asyncHandler } from '../../../common/utils/asyncHandler.js';
 import { ApiError } from '../../../common/middleware/error.middleware.js';
 
@@ -15,11 +16,16 @@ export const createProject = asyncHandler(async (req, res) => {
 
   if (!name) throw new ApiError('Project name is required', 400);
 
+  // Fetch current ingest URL from system config
+  const config = await SystemConfig.findOne({ key: 'ingest_url' });
+  const ingestUrl = config ? config.value : 'http://localhost:3001';
+
   const apiKey = `ll_${crypto.randomBytes(16).toString('hex')}`;
   
   const project = await Project.create({
     name,
     apiKey,
+    ingestUrl,
     owner: req.user?.id,
     platformType,
     databaseType,

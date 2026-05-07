@@ -43,7 +43,7 @@ router.delete('/databases/:id', asyncHandler(async (req, res) => {
 
 router.get('/projects', asyncHandler(async (req, res) => {
   const projects = await Project.find()
-    .populate('userId', 'name email')
+    .populate('owner', 'name email')
     .sort({ createdAt: -1 });
   res.json(projects);
 }));
