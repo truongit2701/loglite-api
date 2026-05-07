@@ -14,8 +14,12 @@ import { SystemConfig } from './modules/system-config/models/system-config.model
 const createApp = () => {
   const app = express();
 
-  // Standard Middlewares
-  app.use(cors());
+  // Standard Middlewares (Fully Permissive CORS for easy deployment)
+  app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-project-key']
+  }));
   app.use(express.json());
   app.use(morgan('dev'));
 
