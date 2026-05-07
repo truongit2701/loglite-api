@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:18-alpine
 
 WORKDIR /app
 
@@ -8,12 +8,12 @@ COPY package*.json ./
 # Install production dependencies
 RUN npm install --production
 
-# Copy source code and config
+# Copy source code (includes src/config)
 COPY src ./src
-COPY config ./config
 
 ENV NODE_ENV=production
 ENV PORT=3001
 EXPOSE 3001
 
+# Entry point is src/main.js
 CMD ["node", "src/main.js"]
