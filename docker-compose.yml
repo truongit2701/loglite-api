@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # --- Database ---
+  mongodb:
+    image: mongo:latest
+    container_name: loglite-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - loglite-network
+
+  # --- LogLite API Server ---
+  server:
+    build:
+      context: . # Sửa từ ./server thành . vì file đã nằm trong folder server
+      dockerfile: Dockerfile
+    container_name: loglite-api
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://mongodb:27017/loglite
+      - PORT=3001
+      - JWT_SECRET=loglite_prod_998877_ultra_secure_secret
+    depends_on:
+      - mongodb
+    networks:
+      - loglite-network
+
+networks:
+  loglite-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:

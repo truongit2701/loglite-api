@@ -1,0 +1,6 @@
+{
+  "port": 3001,
+  "mongoUri": "mongodb://localhost:27017/loglite",
+  "jwtSecret": "loglite-dev-secret-key-123",
+  "logLevel": "debug"
+}
