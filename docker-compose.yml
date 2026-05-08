@@ -13,22 +13,45 @@ services:
     networks:
       - loglite-network
 
-  # --- LogLite API Server ---
+  # --- API Server ---
   server:
     build:
-      context: . # Sửa từ ./server thành . vì file đã nằm trong folder server
+      context: .
       dockerfile: Dockerfile
     container_name: loglite-api
     restart: always
-    ports:
-      - "3001:3001"
+
+    expose:
+      - "3001"
+
     environment:
       - NODE_ENV=production
       - MONGO_URI=mongodb://mongodb:27017/loglite
       - PORT=3001
       - JWT_SECRET=loglite_prod_998877_ultra_secure_secret
+
     depends_on:
       - mongodb
+    networks:
+      - loglite-network
+
+  # --- Caddy (HTTPS + Reverse Proxy) ---
+  caddy:
+    image: caddy:latest
+    container_name: loglite-caddy
+    restart: always
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+
+    depends_on:
+      - server
     networks:
       - loglite-network
 
@@ -38,4 +61,5 @@ networks:
 
 volumes:
   mongodb_data:
-
+  caddy_data:
+  caddy_config:
