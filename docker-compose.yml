@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: loglite-api
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=mongodb://loglite-mongodb:27017/loglite
+      - PORT=3001
+      - JWT_SECRET=loglite_prod_998877_ultra_secure_secret
+    networks:
+      - loglite-network
+
+networks:
+  loglite-network:
+    external: true
