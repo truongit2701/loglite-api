@@ -1,3 +1,0 @@
-api-loglite.duckdns.org {
-    reverse_proxy server:3001
-}
